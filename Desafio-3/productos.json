@@ -1,0 +1,9 @@
+[
+  { "name": "Remera", "price": 3000, "id": 1 },
+  { "name": "Pantalon", "price": 5000, "id": 2 },
+  { "name": "Jean", "price": 5000, "id": 3 },
+  { "name": "Buzo", "price": 5000, "id": 4 },
+  { "name": "Pañuelo", "price": 1000, "id": 5 },
+  { "name": "Medias", "price": 1000, "id": 6 },
+  { "name": "Vestido", "price": 50000, "id": 7 }
+]
