@@ -10,6 +10,7 @@ app.get("/", (req, res) => {
   res.send("Hola mundo!");
 });
 
+
 app.get("/productos", async (req, res) => {
   const productos = JSON.stringify(await contenedor.getAll());
   res.send(`${productos}`);
