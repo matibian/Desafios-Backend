@@ -17,28 +17,33 @@ app.listen(port, () => {
 
 app.use("/api/productos", routerProductos);
 
+app.use(express.static(__dirname + '/public'));
 
-app.get("/", (req, res) => {
-  res.send(
-      "<h1 style='color:blue;'> E-commerce </h1><a href='/form'> Subir producto </a>"
-  );
+app.set('view engine', 'pug');
+app.set('views', './views');
+ 
+
+app.get('/', (req, res) => {
+  res.render('pages/index', {title : "E-commerce"});
 });
+
 app.get("/form", (req, res) => {
-  res.sendFile(__dirname + "/index.html");
+  res.render("pages/form", {title: "Agregar productos"});
 });
 
 app.post("/form", (req, res) => {
   const { body } = req;
   console.log(body);
   contenedor.save(body);
-  res.send("Producto subido correctamente");
+  res.render("pages/gracias", {title: "Producto correctamente agregado"});
 });
 
-
 routerProductos.get("/", async (req, res) => {
+
   try {
     const productos = await contenedor.getAll();
-    res.json(productos);
+    const productsExist = productos.length != 0
+    res.render('pages/products', { title: 'Listado de productos', products: productos, productsExist })
   } catch (error) {
     res.json({ error: true, msj: "error" });
   }

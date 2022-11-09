@@ -1,9 +1,8 @@
 const express = require("express");
 const { Router } = express;
-// const multer = require('multer');
 const routerProductos = Router();
 const Container = require("./Container.js");
-
+const { engine } = require('express-handlebars');
 const app = express();
 const port = process.env.PORT || 8080;
 
@@ -17,28 +16,41 @@ app.listen(port, () => {
 
 app.use("/api/productos", routerProductos);
 
+app.use(express.static(__dirname + '/public'));
+
+app.set('view engine', 'hbs');
+app.set('views', './views');
+app.engine(
+  'hbs',
+  engine({
+    extname: '.hbs',
+    defaultLayout: 'index.hbs',
+    layoutsDir: __dirname + '/views/layouts',
+    partialsDir: __dirname + '/views/partials',
+  })
+);
 
 app.get("/", (req, res) => {
-  res.send(
-      "<h1 style='color:blue;'> E-commerce </h1><a href='/form'> Subir producto </a>"
-  );
+  res.render("inicio", {title: "E-commerce"});
 });
+
 app.get("/form", (req, res) => {
-  res.sendFile(__dirname + "/index.html");
+  res.render('form', {title: "Agregar productos"});
 });
 
 app.post("/form", (req, res) => {
   const { body } = req;
   console.log(body);
   contenedor.save(body);
-  res.send("Producto subido correctamente");
+  res.render('gracias')
 });
 
 
 routerProductos.get("/", async (req, res) => {
   try {
     const productos = await contenedor.getAll();
-    res.json(productos);
+    const productsExist = productos.length != 0
+    res.render('products', { title: 'Listado de productos', products: productos, productsExist })
   } catch (error) {
     res.json({ error: true, msj: "error" });
   }
