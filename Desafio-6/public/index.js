@@ -38,6 +38,11 @@ async function postProducto() {
     return false;
 }   
 
+async function eliminar(id) {
+    await socket.emit("del-product", id );
+    return false;
+}   
+
 socket.on("product-list", (data) => {
     let html = '';
 	
@@ -49,6 +54,7 @@ socket.on("product-list", (data) => {
             <td>${item.name} </td>
             <td>$${item.price} </td>
             <td><img src="${item.thumbnail}" class="product-img"/></td>
+            <td class="trash"><i class="fa-solid fa-trash" onclick="eliminar(${item.id})"></i> </td>
         `
     })
     document.getElementById("tbodyProd").innerHTML = html;

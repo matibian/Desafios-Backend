@@ -42,67 +42,6 @@ app.get("/", async (req, res) => {
   res.render("inicio", {title: "E-commerce"});
 });
 
-// app.get("/form", (req, res) => {
-//   res.render('form', {title: "Agregar productos"});
-// });
-
-// app.post("/form", (req, res) => {
-//   const { body } = req;
-//   console.log(body);
-//   contenedor.save(body);
-//   res.render('gracias')
-// });
-
-
-// routerProductos.get("/", async (req, res) => {
-
-//   try {
-//     const productos = await contenedor.getAll();
-//     const productsExist = productos.length != 0
-//     res.render('pages/products', { title: 'listado de productos', products: productos, productsExist })
-//   } catch (error) {
-//     res.json({ error: true, msj: "error" });
-//   }
-// });
-
-// routerProductos.get("/:id", async (req, res) => {
-//   const id = req.params.id;
-//   res.json((await contenedor.getById(id)) ?? { error: "no encontrado" });
-// });
-
-// routerProductos.post("/", async (req, res) => {
-//   try {
-//     const { body } = req;
-//     contenedor.save(body);
-//     res.json("ok");
-//   } catch (error) {
-//     res.json({ error: true, msj: "error" });
-//   }
-// });
-
-// routerProductos.put("/:id", async (req, res) => {
-//   try {
-//     const { id } = req.params;
-//     const { name, price } = req.body;
-//     console.log(name, price, id)
-//     await contenedor.updateById(id, name, price);
-//     res.json({ succes: true });
-//   } catch (error) {
-//     res.json({ error: true, msj: "error" });
-//   }
-// });
-
-// routerProductos.delete("/:id", async (req, res) => {
-//   try {
-//     const id = req.params.id;
-//     contenedor.deleteById(id);
-//     res.send("Eliminado");
-//   } catch (error) {
-//     res.json({ error: true, msj: "error" });
-//   }
-// });
-
-
 
 // Corre cuando se conecta un clinte
 io.on("connection", async (socket) => {
@@ -128,6 +67,14 @@ io.on("connection", async (socket) => {
     io.emit("product-list", await contenedor.getAll());
 
   });
+
+  socket.on("del-product", async (data) => {
+    console.log(data)
+  
+    await contenedor.deleteById(data);
+    io.emit("product-list", await contenedor.getAll());
+  
+    });
 
   // Recibe mensaje del cliente
   socket.on("msg", async (data) => {
