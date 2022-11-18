@@ -14,7 +14,14 @@ module.exports = class Container {
   save = async (producto) => {
     try {
       const productos = await this.getAll();
-      const id = productos.length + 1;
+      const ids = productos.map(object => {
+        return object.id;
+      });
+      
+      const max = Math.max(...ids);
+      console.log(max);
+
+      const id = max + 1;
       producto.id = id;
       productos.push(producto);
 
