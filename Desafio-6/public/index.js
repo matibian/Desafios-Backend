@@ -4,9 +4,10 @@ const socket = io();
 
 function enviarMsg() {
     const msgParaEnvio = document.getElementById("inputMsg").value;
+    
     const email = document.getElementById("input-email").value;
     socket.emit("msg", { email: email, mensaje: msgParaEnvio });
-    return false;
+    return false
 }
 
 // Recibe mensajes del back y los renderiza en el DOM
@@ -17,7 +18,7 @@ socket.on("msg-list", (data) => {
         html +=
             `
         <div class="msj-container" >
-        <p class="p-email">${item.timestamp} ${item.email} dice: <br> <span> ${item.mensaje}</span> </p>
+        <p class="p-email"><span style="font-weight: bolder; color: blue">${item.email} </span> <span style="color: red"> [${item.timestamp}] : <br> <span style= "color:green"> ${item.mensaje}</span> </p>
         </div> 
         `
     })
@@ -28,11 +29,11 @@ socket.on("msg-list", (data) => {
 
 // Funcion para enviar productos el backend
 
-function postProducto() {
-    const producto = document.getElementById("producto").value;
-    const precio = document.getElementById("precio").value;
-    const imagen = document.getElementById("imagen").value;
-    socket.emit("product", { name: producto, price: precio, thumbnail: imagen });
+async function postProducto() {
+    const producto = await document.getElementById("productos").value;
+    const precio = await document.getElementById("precio").value;
+    const imagen = await document.getElementById("imagen").value;
+    await socket.emit("product", { name: producto, price: precio, thumbnail: imagen });
     console.log(producto);
     return false;
 }   
@@ -55,3 +56,8 @@ socket.on("product-list", (data) => {
 });
 
 
+function botonProd(){
+        postProducto();
+        e.preventDefault()
+
+}

@@ -13,7 +13,7 @@ const httpServer = require("http").createServer(app);
 const io = require("socket.io")(httpServer);
 
 const moment = require('moment');
-const timestamp = moment().format('h:mm a');
+const timestamp = moment().format('lll');
 
 
 app.use(express.json());

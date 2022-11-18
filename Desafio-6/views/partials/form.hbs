@@ -1,5 +1,4 @@
-<form onsubmit="return postProducto()" class="d-flex align-items-center flex-column">
-
+<form onsubmit="return false" class="d-flex align-items-center flex-column">
   <div class="mb-3">
     <input
       type="text"
@@ -8,7 +7,6 @@
       name="name"
     />
   </div>
-
   <div class="mb-3">
     <input
       type="text"
@@ -25,5 +23,5 @@
       name="thumbnail"
     />
   </div>
-  <button type="submit" id="boton" class="btn btn-secondary">Subir producto</button>
+  <button type="submit" onclick="botonProd()" class="btn btn-secondary">Subir producto</button>
 </form>
