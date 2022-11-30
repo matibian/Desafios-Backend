@@ -13,9 +13,9 @@
   },
   {
     "name": "Jean",
-    "price": 5000,
-    "id": 3,
-    "thumbnail": "https://www.tradeinn.com/f/13713/137133676/jack---jones-vaqueros-glenn-original-am-814-slim.jpg"
+    "price": "6000",
+    "thumbnail": "https://www.tradeinn.com/f/13713/137133676/jack---jones-vaqueros-glenn-original-am-814-slim.jpg",
+    "id": 3
   },
   {
     "name": "Buzo",
