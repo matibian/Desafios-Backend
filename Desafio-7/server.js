@@ -43,27 +43,20 @@ app.get("/", async (req, res) => {
 });
 
 
-// Corre cuando se conecta un clinte
 io.on("connection", async (socket) => {
   console.log(`Nuevo cliente conectado ${socket.id}`);
 
-  // Muestra la lista completa de productos al cliente
   socket.emit("product-list", await contenedor.getAll());
 
-  // Muestra el historial completo de mensajes al cliente
   socket.emit("msg-list", await contenedorMsg.getAll());
 
-  // Recibe prodcuto del cliente
   socket.on("product", async (data) => {
     console.log(data)
 
-    // Guarda el producto nuevo en productos.json
     await contenedor.save(data);
 
-    // Muestra el mensaje por consola
     console.log('Se recibio un producto nuevo', "producto:", data);
 
-    // Devuelve el historial completo de mensajes al cliente con el nuevo mensaje
     io.emit("product-list", await contenedor.getAll());
 
   });
@@ -76,16 +69,12 @@ io.on("connection", async (socket) => {
   
     });
 
-  // Recibe mensaje del cliente
   socket.on("msg", async (data) => {
 
-    // Guarda en mensaje nuevo en mensajes.json
     await contenedorMsg.save({ socketid: socket.id, timestamp: timestamp, ...data });
 
-    // Muestra el mensaje por consola
     console.log('Se recibio un msg nuevo', "msg:", data);
 
-    // Devuelve el historial completo de mensajes al cliente con el nuevo mensaje
     io.emit("msg-list", await contenedorMsg.getAll());
 
   });
