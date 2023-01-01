@@ -1,8 +1,9 @@
 const express = require("express");
 const { Router } = express;
 const Container = require("./Container.js");
-const ContenedorMsg = require("./ContainerMsj");
+const ContenedorMsg = require("./contenedores/contenedorMsjArchivo.js");
 const ContenedorFaker = require("./ContainerFake");
+const { normalize, schema, denormalize } = require('normalizr');
 const { engine } = require('express-handlebars');
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -51,12 +52,40 @@ app.get("/api/productos-test", async (req, res) => {
 });
 
 
+
+
+// Normalizr
+
+const authorSchema = new schema.Entity('authors', {}, { idAttribute: 'email' })
+const messageSchema = new schema.Entity('messages', {
+  author: authorSchema
+})
+
+const chatSchema = new schema.Entity("chats", {
+  messages: [messageSchema]
+})
+
+const normalizarData = (data) => {
+  const dataNormalizada = normalize({ id: "chatHistory", messages: data }, chatSchema);
+  return dataNormalizada;
+}
+
+
+const normalizarMensajes = async () => {
+  const messages = await contenedorMsg.getAll();
+  const normalizedMessages = normalizarData(messages);
+  return normalizedMessages;
+
+}
+
+///// Conexion socket
+
 io.on("connection", async (socket) => {
   console.log(`Nuevo cliente conectado ${socket.id}`);
 
   socket.emit("product-list", await contenedor.getAll());
 
-  socket.emit("msg-list", await contenedorMsg.getAll());
+  socket.emit("msg-list", await normalizarMensajes());
 
   socket.on("product", async (data) => {
     console.log(data)
@@ -83,7 +112,7 @@ io.on("connection", async (socket) => {
 
     console.log('Se recibio un msg nuevo', "msg:", data);
 
-    io.emit("msg-list", await contenedorMsg.getAll());
+    io.emit("msg-list", await normalizarMensajes());
 
   });
 });

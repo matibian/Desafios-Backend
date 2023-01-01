@@ -1,24 +1,38 @@
 const socket = io();
 
-// Envia mensajes al backend
+const authorSchema = new normalizr.schema.Entity('authors', {}, { idAttribute: 'email' })
+const messageSchema = new normalizr.schema.Entity('messages', {
+    author: authorSchema
+})
+
+const chatSchema = new normalizr.schema.Entity("chats", {
+    messages: [messageSchema]
+})
+
 
 function enviarMsg() {
     const msgParaEnvio = document.getElementById("inputMsg").value;
-    
     const email = document.getElementById("input-email").value;
-    socket.emit("msg", { email: email, mensaje: msgParaEnvio });
+    const nombre = document.getElementById("input-nombre").value;
+    const apellido = document.getElementById("input-apellido").value;
+
+    socket.emit("msg", { author: {email: email, nombre: nombre, apellido: apellido }, mensaje: msgParaEnvio });
     return false
 }
 
 // Recibe mensajes del back y los renderiza en el DOM
 
 socket.on("msg-list", (data) => {
-    let html = '';
-    data.forEach(item => {
+    const dataNormLen = JSON.stringify(data).length
+    const dataMsg = normalizr.denormalize(data.result, chatSchema, data.entities)
+    const dataDenormLen = JSON.stringify(dataMsg).length
+    const porc = dataNormLen/dataDenormLen*100
+    let html = ` <br/> <h2>(COMPRESIÓN: %${porc.toFixed(2)} )</h3> <br/>`;
+    dataMsg.messages.forEach(item => {
         html +=
             `
         <div class="msj-container" >
-        <p class="p-email"><span style="font-weight: bolder; color: blue">${item.email} </span> <span style="color: red"> [${item.timestamp}] : <br> <span style= "color:green"> ${item.mensaje}</span> </p>
+        <p class="p-email"><span style="font-weight: bolder; color: blue">${item.author.email} </span> <span style="color: red"> [${item.timestamp}] : <br> <span style= "color:green"> ${item.mensaje}</span> </p>
         </div> 
         `
     })
