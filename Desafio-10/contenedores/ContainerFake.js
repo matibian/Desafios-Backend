@@ -1,4 +1,4 @@
-const { generarProducto }  = require ("./DB/fakerProducts")
+const { generarProducto }  = require ("../DB/fakerProducts")
 
 class ContenedorFake{
   constructor() {

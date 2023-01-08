@@ -1,4 +1,4 @@
-const { optionsMYSQL } = require("./options/mysql.js");
+const { optionsMYSQL } = require("../options/mysql.js");
 const knex = require("knex")(optionsMYSQL);
 
 module.exports = class Container {

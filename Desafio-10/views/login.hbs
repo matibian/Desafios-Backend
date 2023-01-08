@@ -1,0 +1,35 @@
+<html lang='es'>
+  <head>
+    {{>head}}
+  </head>
+  <body>
+    <div class="title">
+      {{{title}}}
+    </div>
+    <br>
+<div class="container">
+  <form onsubmit="return false" class="d-flex align-items-center flex-column">
+    <div class="mb-3">
+        <input
+        type="text"
+        id="usuario"
+        placeholder="Usuario"
+        name="username"
+        />
+    </div>
+    <div class="mb-3">
+        <input
+        type="text"
+        id="contraseña"
+        placeholder="Contraseña"
+        name="password"
+        />
+    </div>
+    <button type="submit" onclick="botonProd()" class="btn btn-secondary">Login</button>
+</form>
+</div>
+
+  <script src="../index.js"></script>
+  </body>
+   {{> footer}}
+</html>

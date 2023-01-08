@@ -1,12 +1,17 @@
 const express = require("express");
 const { Router } = express;
 const Container = require("./contenedores/Container.js");
-const ContenedorMsg = require("./contenedores/contenedorMsjArchivo.js");
+const ContenedorMsg = require("./contenedores/contenedorMsjArchivo");
 const ContenedorFaker = require("./contenedores/ContainerFake");
 const { normalize, schema, denormalize } = require('normalizr');
 const { engine } = require('express-handlebars');
 const app = express();
 const PORT = process.env.PORT || 8080;
+
+const routes = require("./routes")
+
+const MongoStore = require("connect-mongo")
+const session = require("express-session");
 
 const contenedor = new Container("productos");
 const contenedorMsg = new ContenedorMsg("mensajes")
@@ -27,6 +32,7 @@ httpServer.listen(PORT, () => console.log("SERVER ON http://localhost:" + PORT))
 
 
 
+
 app.use(express.static(__dirname + '/public'));
 
 app.set('view engine', 'hbs');
@@ -41,9 +47,17 @@ app.engine(
   })
 );
 
-app.get("/", async (req, res) => {
-  res.render("inicio.hbs", {title: "E-commerce"});
-});
+function auth(req, res, next) {
+  if (req.session.user) {
+    return next();
+  } else {
+    // res.status(401).send("error de autorización!")
+    return res.redirect("/login");
+    
+  }
+}
+
+
 
 app.get("/api/productos-test", async (req, res) => {
   const prodFake = prodFaker.getProd(5)
@@ -116,3 +130,39 @@ io.on("connection", async (socket) => {
 
   });
 });
+
+
+
+/////////// SESION //////////
+
+
+app.use(
+  session({
+    store: MongoStore.create({
+      mongoUrl:        "mongodb+srv://tamara:123456Coder@cluster0.u37xyzn.mongodb.net/Proyecto-back",
+      mongoOptions: {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      },
+      ttl: 60,
+    }),
+    secret: "secreto",
+    resave: false,
+    saveUninitialized: false,
+
+  })
+);
+
+
+
+app.get("/", auth, routes.getRoot);
+
+app.get("/showsession", routes.getShowsession);
+
+app.get("/logout", routes.getLogout);
+
+app.get("/login", routes.getLogin);
+
+app.post("/login", routes.postLogin);
+
+app.get("/privado", auth, routes.getPrivado);
