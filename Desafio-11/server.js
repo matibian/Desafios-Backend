@@ -138,7 +138,7 @@ app.use(
         useNewUrlParser: true,
         useUnifiedTopology: true,
       },
-      ttl: 60,
+      ttl: 10 * 60,
     }),
     secret: "secreto",
     resave: false,
