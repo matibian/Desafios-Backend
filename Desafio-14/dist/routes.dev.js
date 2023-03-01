@@ -261,7 +261,7 @@ function getInfo(req, res) {
 }
 
 function getApirandom(req, res) {
-  logger.info("// Route : http://localhost/apirandom  || Method: GET // ");
+  logger.info("// Route : http://localhost/:apirandom  || Method: GET // ");
   var cant;
   var cantidad = req.query.cant || 100000;
   var PORT = parseInt(process.argv[2]) || 8080;

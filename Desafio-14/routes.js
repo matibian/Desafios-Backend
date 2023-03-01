@@ -156,7 +156,7 @@ res.render("info", {argumentos: argumentos, path: path, PID: PID, version: versi
 
 }
 function getApirandom(req, res) {
-  logger.info("// Route : http://localhost/apirandom  || Method: GET // ");
+  logger.info("// Route : http://localhost/:apirandom  || Method: GET // ");
 
   let cant
   let cantidad = req.query.cant || 100000
