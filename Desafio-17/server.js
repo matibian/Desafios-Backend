@@ -7,8 +7,7 @@ const httpServer = require("http").createServer(app);
 const io = require("socket.io")(httpServer);
 const routerDatos = require("./routes/data.js");
 const websocket = require("./service/io.js");
-const { MongoSession } = require("./config/services");
-const { MongoDBService } = require("./config/services");
+const { MongoSession, MongoDBService } = require("./config/services");
 
 app.use(express.static(__dirname + "/public"));
 
