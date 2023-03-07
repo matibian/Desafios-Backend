@@ -1,10 +1,10 @@
-const { optionsSQLite } = require("../options/sqlite");
+const { optionsSQLite } = require("../../options/sqlite");
 
 const knex = require("knex")(optionsSQLite);
 
-class ContenedorMsg {
-  constructor(table) {
-    this.table = table;
+class DAOmessagesSQlite {
+  constructor() {
+    this.table = "mensajes";
   }
 
   getAll = async () => {
@@ -31,4 +31,6 @@ class ContenedorMsg {
   };
 }
 
-module.exports = ContenedorMsg;
+// const DAOmessagesSQlite = new ContenedorMsg("mensajes");
+
+module.exports = DAOmessagesSQlite;

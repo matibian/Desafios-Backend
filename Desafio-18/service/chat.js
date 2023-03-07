@@ -1,15 +1,13 @@
 const { normalize, schema, denormalize } = require("normalizr");
-const express = require("express");
-const app = express();
-const httpServer = require("http").createServer(app);
-// const io = require("socket.io")(httpServer);
+
 const moment = require("moment");
 const timestamp = moment().format("lll");
 
-const Container = require("../data/contenedores/Container.js");
-const ContenedorMsg = require("../data/contenedores/ContainerMsj");
-const contenedor = new Container("productos");
-const contenedorMsg = new ContenedorMsg("mensajes");
+// const Container = require("../models/DAOs/DAOproducts.js");
+// const ContenedorMsg = require("../models/DAOs/DAOmessagesSQlite");
+const DAOmessages = require("../models/DAOs/DAOmessajes/factoryDAOSmessages");
+const DAOproducts = require("../models/DAOs/DAOproducts.js");
+// const DAOmessages = require("../models/DAOs/DAOmessajes/DAOmessagesSQlite.js");
 
 // Normalizr
 
@@ -31,7 +29,7 @@ const normalizarData = (data) => {
 };
 
 const normalizarMensajes = async () => {
-  const messages = await contenedorMsg.getAll();
+  const messages = await DAOmessages.getAll();
   const normalizedMessages = normalizarData(messages);
   return normalizedMessages;
 };
@@ -42,29 +40,29 @@ async function websocket(io) {
   io.on("connection", async (socket) => {
     console.log(`Nuevo cliente conectado ${socket.id}`);
 
-    socket.emit("product-list", await contenedor.getAll());
+    socket.emit("product-list", await DAOproducts.getAll());
 
     socket.emit("msg-list", await normalizarMensajes());
 
     socket.on("product", async (data) => {
       console.log(data);
 
-      await contenedor.save(data);
+      await DAOproducts.save(data);
 
       console.log("Se recibio un producto nuevo", "producto:", data);
 
-      io.emit("product-list", await contenedor.getAll());
+      io.emit("product-list", await DAOproducts.getAll());
     });
 
     socket.on("del-product", async (data) => {
       console.log(data);
 
-      await contenedor.deleteById(data);
-      io.emit("product-list", await contenedor.getAll());
+      await DAOproducts.deleteById(data);
+      io.emit("product-list", await DAOproducts.getAll());
     });
 
     socket.on("msg", async (data) => {
-      await contenedorMsg.save({
+      await DAOmessages.save({
         socketid: socket.id,
         timestamp: timestamp,
         ...data,
