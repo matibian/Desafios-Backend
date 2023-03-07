@@ -3,11 +3,8 @@ const { normalize, schema, denormalize } = require("normalizr");
 const moment = require("moment");
 const timestamp = moment().format("lll");
 
-// const Container = require("../models/DAOs/DAOproducts.js");
-// const ContenedorMsg = require("../models/DAOs/DAOmessagesSQlite");
 const DAOmessages = require("../models/DAOs/DAOmessajes/factoryDAOSmessages");
 const DAOproducts = require("../models/DAOs/DAOproducts.js");
-// const DAOmessages = require("../models/DAOs/DAOmessajes/DAOmessagesSQlite.js");
 
 // Normalizr
 
