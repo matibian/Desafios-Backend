@@ -13,9 +13,6 @@ export class Product {
 
   @Prop()
   thumbnail: string;
-
-  @Prop()
-  id: string;
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);

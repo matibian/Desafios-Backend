@@ -5,12 +5,12 @@ import { ProductsModule } from './products/products.module';
 import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
-  // imports: [ProductsModule],
   controllers: [AppController],
   providers: [AppService],
   imports: [
+    ProductsModule,
     MongooseModule.forRoot(
-      'mongodb+srv://matubianchi:123456@cluster0.u37xyzn.mongodb.net/testNest',
+      'mongodb+srv://matubianchi:Coderhouse123456@cluster0.u37xyzn.mongodb.net/testNest',
     ),
   ],
 })
