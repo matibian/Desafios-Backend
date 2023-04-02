@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "babel": "^6.23.0",
+    "deno": "^0.1.1",
     "ejs": "^3.1.8",
     "express": "^4.18.2",
     "express-handlebars": "^6.0.6",
@@ -27,5 +28,3 @@
     "sqlite3": "^5.1.2"
   }
 }
-
-
